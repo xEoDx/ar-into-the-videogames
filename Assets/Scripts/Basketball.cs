@@ -37,12 +37,14 @@ public class Basketball : MonoBehaviour
         return _isActive;
     }
 
-    public void Shoot(Vector3 direction, float speed)
+    public void Shoot(float speed)
     {
         Show();
         transform.position = _mainCamera.transform.position + Vector3.forward * 0.1f - Vector3.up * 0.2f;
+        var shootDirection = _mainCamera.transform.forward + _mainCamera.transform.up * 0.5f;
+
         _rigidbody.velocity = Vector3.zero;
-        _rigidbody.AddForce(direction * speed * 100);
+        _rigidbody.AddForce(shootDirection * speed);
     }
 
     private void Hide()

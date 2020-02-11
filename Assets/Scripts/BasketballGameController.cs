@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Lean.Touch;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BasketballGameController : MonoBehaviour
 {
@@ -13,75 +9,22 @@ public class BasketballGameController : MonoBehaviour
     [SerializeField, Range(1, 20)] private int poolSize = 10;
 
     private BasketballPool _basketballPool;
-
-    private ShootData _shootData;
-
+    private InputController _inputController;
     void Start()
     {
+        _inputController = FindObjectOfType<InputController>();
+        _inputController.OnSwipe += OnSwipeListener;
         _basketballPool = new BasketballPool(basketballPrefab, poolSize, imageTargetObject);
         _basketballPool.Init();
-        _shootData = new ShootData();
     }
 
-    public void ApplyDirection(int direction)
+    private void OnSwipeListener(float speed)
     {
-        _shootData.shootDirection = (ShootData.Direction) direction;
+        Shoot(speed);
     }
 
-    public void ApplySpeed(float speed)
+    public void Shoot(float speed)
     {
-        _shootData.shootSpeed = speed;
-    }
-
-    public void Shoot()
-    {
-        var shootDirection = _shootData.GetShootDirection();
-        _basketballPool.ShootBall(shootDirection, _shootData.shootSpeed);
-    }
-
-    public class ShootData
-    {
-        public enum Direction
-        {
-            N = 1,
-            NE = 2,
-            E = 3,
-            NW = 4,
-            W = 5,
-
-            COUNT,
-            INVALID
-        }
-
-        public Direction shootDirection;
-        public float shootSpeed;
-
-        public Vector3 GetShootDirection()
-        {
-            Vector3 direction = Vector3.zero;
-
-            var compensationFactor = 0.2f;
-            switch (shootDirection)
-            {
-                case Direction.N:
-                    direction = Vector3.forward + Vector3.up * compensationFactor;
-                    break;
-                case Direction.NE:
-                    direction = Vector3.forward + Vector3.up * compensationFactor + Vector3.right;
-                    break;
-                case Direction.NW:
-                    direction = Vector3.forward + Vector3.up * compensationFactor + Vector3.left;
-                    break;
-                case Direction.W:
-                    direction = Vector3.forward + Vector3.up * compensationFactor + Vector3.left;
-                    break; 
-                case Direction.E:
-                    direction = Vector3.forward + Vector3.up * compensationFactor + Vector3.right;
-                    break;
-            }
-
-            return direction;
-        }
-        
-    }
+        _basketballPool.ShootBall(speed);
+    } 
 }

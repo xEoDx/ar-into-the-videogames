@@ -28,12 +28,12 @@ public class BasketballPool
         }
     }
 
-    public void ShootBall(Vector3 direction, float speed)
+    public void ShootBall(float speed)
     {
         var basketball = _basketBallPool.First(o => !o.IsActive());
         if (basketball != null)
         {
-            basketball.Shoot(direction, speed);
+            basketball.Shoot(speed);
         }
     }
 }
