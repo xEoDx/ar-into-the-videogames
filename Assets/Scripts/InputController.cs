@@ -76,7 +76,6 @@ public class InputController : MonoBehaviour
         if (OnSwipe != null)
         {
             _swipeSpeed = Mathf.Clamp(30 / Mathf.Abs(_swipeEndTime - _swipeInitialTime), 100, 300);
-            Debug.Log("Swipe speed> "+_swipeSpeed);
             OnSwipe(_swipeSpeed);
         }
     }

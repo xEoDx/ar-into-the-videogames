@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class BasketballPostController : MonoBehaviour
 {
+    public delegate void OnScoreEvent();
+
+    public event OnScoreEvent OnScore;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ball"))
         {
-            Debug.Log("Basket!");   
+            if (OnScore != null)
+            {
+                OnScore();
+            }
         }
     }
 }
