@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class BasketballPostController : MonoBehaviour
 {
-    public delegate void OnScoreEvent();
-
-    public event OnScoreEvent OnScore;
+    private BasketballGameController _basketballController;
+  
+    private void Start()
+    {
+        _basketballController = FindObjectOfType<BasketballGameController>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ball"))
         {
-            if (OnScore != null)
-            {
-                OnScore();
-            }
+            _basketballController.Score();
         }
     }
 }

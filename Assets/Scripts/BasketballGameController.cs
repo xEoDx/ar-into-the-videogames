@@ -15,6 +15,10 @@ public class BasketballGameController : MonoBehaviour
     private int gameDurationSeconds = 30;
 
     
+    public delegate void OnScoreEvent();
+
+    public event OnScoreEvent OnScore;
+    
     private const float MinTimeBetweenShoots = 0.5f;
     
     private float _elapsedTime;
@@ -42,7 +46,6 @@ public class BasketballGameController : MonoBehaviour
     private State _state;
     private BasketballPool _basketballPool;
     private InputController _inputController;
-    private BasketballPostController _basketballPostController;
 
     private float _lastShootTime;
     
@@ -50,8 +53,6 @@ public class BasketballGameController : MonoBehaviour
     private void Start()
     {
         _state = State.AWAITING; 
-        _basketballPostController = FindObjectOfType<BasketballPostController>();
-        _basketballPostController.OnScore += OnScoreListener;
         
         _inputController = FindObjectOfType<InputController>();
         _inputController.OnSwipe += OnSwipeListener;
@@ -68,15 +69,19 @@ public class BasketballGameController : MonoBehaviour
             if (_elapsedTime > gameDurationSeconds)
             {
                 //TODO trigger game end
+                StopGameplay();
             }
         }
 
         _lastShootTime += Time.deltaTime;
     }
 
-    private void OnScoreListener()
+
+    public void Score()
     {
         _totalPoints += basketballScorePoints;
+
+        OnScore?.Invoke();
     }
 
     private void OnSwipeListener(float speed)
